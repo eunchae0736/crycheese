@@ -38,8 +38,8 @@
 /* 모바일 웹 전용: 화면 폭과 관계없이 휴대폰 폭 프레임 안에서 렌더링합니다.
    transform으로 fixed 요소(하단 탭, 모달, 토스트, 드로어)가 프레임 기준으로 붙고(스크롤은 안쪽 .mobile-scroll이 담당),
    반응형 규칙은 뷰포트 대신 이 프레임 폭(@container app)을 기준으로 적용됩니다. */
-.mobile-frame { container: app / inline-size; position: relative; width: 100%; max-width: 430px; height: 100vh; height: 100dvh; margin: 0 auto; overflow: hidden; background: #f7f8fa; box-shadow: 0 0 0 1px rgba(16,24,40,.06), 0 20px 50px rgba(16,24,40,.12); transform: translateZ(0); }
-.mobile-scroll { height: 100%; overflow-x: hidden; overflow-y: auto; }
+.mobile-frame { container: app / inline-size; position: relative; width: 100%; min-width: 0; max-width: 430px; height: 100vh; height: 100dvh; margin: 0 auto; overflow: hidden; background: #f7f8fa; box-shadow: 0 0 0 1px rgba(16,24,40,.06), 0 20px 50px rgba(16,24,40,.12); transform: translateZ(0); }
+.mobile-scroll { width: 100%; min-width: 0; height: 100%; overflow-x: hidden; overflow-y: auto; }
 
 * { scrollbar-width: thin; scrollbar-color: #cfd5df transparent; }
 
@@ -212,7 +212,7 @@
 .manager-header { position: sticky; top: 0; z-index: 20; display: flex; height: 64px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8ebef; background: rgba(255,255,255,.96); padding: 0 24px; backdrop-filter: blur(12px); }
 .manager-brand { display: flex; align-items: center; gap: 8px; color: #1e1e1e; letter-spacing: .05em; }
 .manager-tools { display: flex; align-items: center; gap: 8px; }
-.manager-main { max-width: 1020px; margin: 0 auto; padding: 32px 28px 110px; }
+.manager-main { width: 100%; min-width: 0; max-width: 1020px; margin: 0 auto; padding: 32px 28px 110px; }
 .manager-welcome p { color: #818b99; font-size: 12px; font-weight: 600; }
 .manager-welcome h1 { margin-top: 9px; font-size: 25px; font-weight: 850; letter-spacing: -.035em; }
 .manager-welcome > span { display: block; margin-top: 7px; color: #697587; font-size: 13px; }
@@ -378,11 +378,11 @@
 .review-list-simple { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
 .review-list-simple article { border: 1px solid #e4e8ee; border-radius: 12px; background: white; padding: 18px; }.review-list-simple article > div { display: flex; align-items: center; gap: 9px; }.review-list-simple article > div span { display: flex; flex: 1; flex-direction: column; }.review-list-simple article b { font-size: 10px; }.review-list-simple article small { margin-top: 3px; color: #949ca8; font-size: 8px; }.review-list-simple article strong { color: #e5a92f; font-size: 10px; letter-spacing: 1px; }.review-list-simple article > p { margin-top: 16px; color: #505c6d; font-size: 10px; line-height: 1.7; }.review-list-simple article > span { display: flex; width: max-content; align-items: center; gap: 4px; border-radius: 4px; margin-top: 13px; background: #fff1e0; padding: 5px 7px; color: #aa6f1c; font-size: 8px; font-weight: 700; }.review-list-simple article > span.positive { background: #e9f7f1; color: #2e8267; }
 .floating-report-add { position: fixed; z-index: 25; right: 28px; bottom: 91px; display: grid; width: 48px; height: 48px; place-items: center; border-radius: 50%; background: #0a6936; color: white; font-size: 25px; box-shadow: 0 8px 22px rgba(42,79,158,.28); }
-.report-modal-backdrop { position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; background: rgba(15,24,39,.48); padding: 20px; backdrop-filter: blur(4px); }
-.report-modal { overflow: hidden; width: min(590px, 100%); max-height: calc(100vh - 40px); overflow-y: auto; border-radius: 14px; background: white; box-shadow: 0 24px 60px rgba(15,24,39,.25); }
+.report-modal-backdrop { position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; background: rgba(15,24,39,.48); padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); backdrop-filter: blur(4px); }
+.report-modal { overflow: hidden; width: min(590px, 100%); max-height: calc(100dvh - 40px); overflow-y: auto; overscroll-behavior: contain; border-radius: 14px; background: white; box-shadow: 0 24px 60px rgba(15,24,39,.25); }
 .report-modal-heading { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #e8ebef; padding: 20px 22px 17px; }.report-modal-heading h2 { margin-top: 8px; font-size: 17px; }.report-modal-heading p { margin-top: 4px; color: #838d9c; font-size: 9px; }.report-modal-heading > button { color: #8c95a2; }
 .report-form { padding: 18px 22px; }.report-form > label { display: block; margin-bottom: 15px; }.report-form > label > span, .report-tasks > span { display: block; margin-bottom: 7px; color: #667285; font-size: 8px; font-weight: 800; }.report-form > label input, .report-form textarea { width: 100%; border: 1px solid #dfe3e9; border-radius: 7px; outline: 0; background: #fcfcfc; padding: 10px 11px; color: #374255; font-size: 9px; line-height: 1.6; }.report-form > label input:focus, .report-form textarea:focus { border-color: #86cea5; background: white; }
-.report-auto-summary { display: grid; grid-template-columns: repeat(4,1fr); gap: 7px; margin-bottom: 15px; }.report-auto-summary span { display: flex; flex-direction: column; border-radius: 7px; background: #f6f9f7; padding: 10px; }.report-auto-summary b { color: #7f8998; font-size: 7px; }.report-auto-summary strong { margin-top: 5px; font-size: 10px; }
+.report-auto-summary { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 7px; margin-bottom: 15px; }.report-auto-summary span { display: flex; min-width: 0; flex-direction: column; border-radius: 7px; background: #f6f9f7; padding: 10px; }.report-auto-summary b { color: #7f8998; font-size: 7px; }.report-auto-summary strong { min-width: 0; margin-top: 5px; overflow-wrap: anywhere; font-size: 10px; }
 .report-tasks { border-radius: 8px; background: #f7f8fa; padding: 12px; }.report-tasks label { display: flex; align-items: center; gap: 7px; margin-top: 8px; color: #4f5b6d; font-size: 8px; }.report-tasks input { accent-color: #0a6936; }
 .report-modal-actions { display: flex; justify-content: flex-end; gap: 7px; border-top: 1px solid #e8ebef; padding: 14px 22px; }.report-modal-actions button { height: 36px; border: 1px solid #dfe3e9; border-radius: 7px; padding: 0 14px; color: #647083; font-size: 8px; font-weight: 800; }.report-modal-actions button:last-child { display: flex; align-items: center; gap: 5px; border-color: #0a6936; background: #0a6936; color: white; }
 .issue-type-options { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; }.issue-type-options button { height: 32px; border: 1px solid #dfe3e9; border-radius: 6px; background: white; color: #687487; font-size: 8px; font-weight: 700; }.issue-type-options button.active { border-color: #d45a55; background: #fff0ef; color: #c64a46; }
@@ -864,7 +864,7 @@ label.inventory-check { display: flex; align-items: center; gap: 6px; color: #34
 .calendar-grid button { min-width: 0; height: 58px; min-height: 0; overflow: hidden; }
 .calendar-grid button small { display: block; width: 100%; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .calendar-grid .more-events { flex: none; }
-.store-report-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+.store-report-picker { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
 .store-report-picker button { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; border: 1px solid #e1e5eb; border-radius: 10px; background: white; padding: 10px 11px; text-align: left; }
 .store-report-picker button b { color: #1e1e1e; font-size: 11px; font-weight: 850; }
 .store-report-picker button small { color: #8a94a2; font-size: 9px; }
@@ -879,3 +879,118 @@ label.inventory-check { display: flex; align-items: center; gap: 6px; color: #34
 .sv-report-actions button:disabled:not(.done) { opacity: .5; }
 .sv-reply-form > div { gap: 6px; }
 .sv-reply-form > div > button:not(.primary) { border: 1px solid #dfe3e9; border-radius: 7px; background: white; padding: 7px 11px; color: #5c6878; font-size: 10px; font-weight: 800; }
+
+/* Narrow mobile layouts: shrink the layout itself instead of masking overflow. */
+:where(.manager-main, .dashboard-content, .checklist-screen-body, .report-modal) :where(div, section, article, header, footer, main, nav, p, span) {
+  min-width: 0;
+}
+
+:where(.manager-main, .dashboard-content, .checklist-screen-body, .report-modal) :where(h1, h2, h3, h4, p, strong, b, small, dd) {
+  overflow-wrap: anywhere;
+}
+
+.deadline-copy,
+.sales-trend-head > div,
+.cost-heading > div,
+.manager-section-title > div,
+.inventory-history-head > div,
+.feedback-top > :first-child {
+  min-width: 0;
+}
+
+.deadline-copy b,
+.deadline-copy small,
+.sales-trend-head h2,
+.sales-trend-head p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@container app (max-width: 380px) {
+  .metric-grid,
+  .status-overview,
+  .store-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .deadline-list > button {
+    grid-template-columns: 62px minmax(0, 1fr) 16px;
+    gap: 8px;
+    padding: 12px 10px;
+  }
+
+  .deadline-list > button > :nth-child(3),
+  .deadline-list .progress-ring {
+    display: none;
+  }
+
+  .task-card,
+  .simple-panel,
+  .sales-trend-card,
+  .sv-report-card,
+  .feedback-list > article {
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+}
+
+@container app (max-width: 360px) {
+  .sales-trend-head,
+  .cost-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sales-trend-head > span,
+  .cost-total {
+    align-items: flex-start;
+  }
+
+  .store-report-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .report-modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .report-modal-actions button {
+    width: 100%;
+    padding: 0 8px;
+  }
+}
+
+@container app (max-width: 340px) {
+  .report-auto-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .weekly-counts,
+  .weekly-counts.three {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .today-summary {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .bottom-nav button {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+@container app (max-width: 640px) {
+  .report-modal-backdrop {
+    padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  }
+
+  .report-modal {
+    max-height: calc(100dvh - max(20px, env(safe-area-inset-top)) - max(20px, env(safe-area-inset-bottom)));
+  }
+}

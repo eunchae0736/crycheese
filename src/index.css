@@ -935,6 +935,78 @@ label.inventory-check { display: flex; align-items: center; gap: 6px; color: #34
   }
 }
 
+/* Report screen typography: preserve the CRBU theme while improving readability. */
+.report-page .subpage-heading h1 { font-size: 28px; }
+.report-page .subpage-heading p { font-size: 13px; }
+.report-page .report-tabs button { font-size: 14px; }
+.report-page .compose-options b { font-size: 15px; }
+.report-page .compose-options p { font-size: 12px; line-height: 1.5; }
+.report-page .compose-actions button { font-size: 12px; }
+.report-page .simple-panel-title h2 { font-size: 16px; }
+.report-page .simple-panel-title p { font-size: 12px; line-height: 1.45; }
+.report-page .simple-panel-title > b,
+.report-page .simple-panel-title > strong { font-size: 14px; }
+.report-page .sales-total small { font-size: 12px; }
+.report-page .sales-total strong { font-size: 26px; }
+.report-page .sales-total b { font-size: 14px; }
+.report-page .sales-meta small { font-size: 10px; }
+.report-page .sales-meta b { font-size: 12px; }
+.report-page .cost-legend span,
+.report-page .cost-legend b { font-size: 10px; }
+.report-page .cost-ai-note b { font-size: 12px; }
+.report-page .cost-ai-note span { font-size: 10px; line-height: 1.45; }
+.report-page .report-review-heading h2 { font-size: 18px; }
+.report-page .report-review-heading p { font-size: 12px; }
+.report-page .review-summary-top h2 { font-size: 17px; }
+.report-page .review-summary-card > p { font-size: 14px; }
+.report-page .review-keywords span { font-size: 11px; }
+.report-page .review-actions h3 { font-size: 15px; }
+.report-page .review-actions strong { font-size: 13px; }
+.report-page .review-actions span { font-size: 12px; }
+.report-page .feedback-list h3 { font-size: 16px; }
+.report-page .feedback-list article > p,
+.report-page .feedback-reply p { font-size: 13px; }
+
+@container app (max-width: 360px) {
+  .report-page .subpage-heading h1 { font-size: 26px; }
+  .report-page .compose-options b { font-size: 14px; }
+  .report-page .sales-total strong { font-size: 23px; }
+}
+
+/* Cost management typography and touch targets. */
+.cost-panel .cost-heading h2 { font-size: 18px; }
+.cost-panel .cost-heading p { font-size: 12px; line-height: 1.5; }
+.cost-panel .cost-total small { font-size: 11px; }
+.cost-panel .cost-total strong { font-size: 22px; }
+.cost-panel .cost-total span { font-size: 10px; }
+.cost-panel .cost-form > h3,
+.cost-panel .cost-history h3 { font-size: 15px; }
+.cost-panel .cost-form > label,
+.cost-panel .cost-input-row label { font-size: 12px; }
+.cost-panel .cost-types button { min-height: 40px; font-size: 11px; }
+.cost-panel .cost-input-row label > input,
+.cost-panel .cost-input-row label > div { height: 44px; }
+.cost-panel .cost-input-row input { font-size: 13px; }
+.cost-panel .cost-input-row b { font-size: 11px; }
+.cost-panel .cost-submit { height: 46px; font-size: 13px; }
+.cost-panel .cost-history > div:first-child button { min-height: 32px; font-size: 11px; }
+.cost-panel .cost-row { grid-template-columns: 56px minmax(0, 1fr) auto; gap: 10px; padding: 14px 0; }
+.cost-panel .cost-category { min-height: 28px; font-size: 10px; }
+.cost-panel .cost-row p b { font-size: 13px; }
+.cost-panel .cost-row p small { font-size: 10px; }
+.cost-panel .cost-row > strong { font-size: 12px; white-space: nowrap; }
+
+@container app (max-width: 360px) {
+  .cost-panel .cost-heading {
+    gap: 12px;
+  }
+
+  .cost-panel .cost-total strong { font-size: 20px; }
+  .cost-panel .cost-types { grid-template-columns: 1fr 1fr; }
+  .cost-panel .cost-row { grid-template-columns: 50px minmax(0, 1fr); }
+  .cost-panel .cost-row > strong { grid-column: 2; justify-self: start; }
+}
+
 @container app (max-width: 360px) {
   .sales-trend-head,
   .cost-heading {

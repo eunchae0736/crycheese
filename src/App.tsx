@@ -187,8 +187,6 @@ function latestEvent(data: Snapshot, issue: Issue, operation: string) {
   return data.events.filter(e => e.action_id === issue.action!.id && e.operation === operation).sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0] || null
 }
 
-const eventTime = (event: Row | null) => event ? new Date(event.created_at).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'
-
 // anyKind: 매장 페이지처럼 점장이 보낸 이슈뿐 아니라 점검 기록 이슈까지 함께 볼 때
 function resultGroupOf(data: Snapshot, issue: Issue, anyKind = false): ResultGroup | null {
   const requested = String(latestEvent(data, issue, 'assign')?.actor || '').startsWith('SV')
@@ -202,17 +200,16 @@ function ActionResultCard({ issue, group, onRequest }: { issue: Issue; group: Re
   const live = useLive()
   const { data } = live
   const request = latestEvent(data, issue, 'assign')
-  const done = latestEvent(data, issue, 'request_verification')
   const tone = group === 'need' ? 'critical' : group === 'doing' ? 'info' : 'good'
   return (
     <article className={`result-card ${group}`}>
       <div className="result-top"><div><Badge tone={tone}>{resultGroups.find(g => g.key === group)!.label}</Badge><small>{storeName(data, issue.store_id)} · {issue.severity === 'critical' ? '긴급' : '일반'}</small></div><button type="button" onClick={() => live.open({ type: 'issue', issue })}>상세 <Icon name="chevron" size={13} /></button></div>
       <h3>{issue.title}</h3>
       <div className="result-steps">
-        <div><span className="step-label">{issue.kind === 'manual' ? '점장 전달' : '점검 기록'}</span><p>{issue.description}</p><small>{issue.business_date}{issue.kind !== 'manual' && issue.standard ? ` · 기준 ${issue.standard}` : ''}</small></div>
-        {group !== 'need' && <div><span className="step-label">SV 요청</span><p>{request?.note || '요청 내용 없음'}</p><small>{eventTime(request)} · 기한 {issue.due_date || '미정'}</small></div>}
+        <div><span className="step-label">{issue.kind === 'manual' ? '점장 전달' : '점검 기록'}</span><p>{issue.description}</p>{issue.kind !== 'manual' && issue.standard && <small>기준 {issue.standard}</small>}</div>
+        {group !== 'need' && <div><span className="step-label">SV 요청</span><p>{request?.note || '요청 내용 없음'}</p><small>기한 {issue.due_date || '미정'}</small></div>}
         {group === 'doing' && <div className="empty"><span className="step-label">점장 조치</span><p>아직 조치 완료를 누르지 않았어요.</p></div>}
-        {group === 'done' && <div className="verified"><span className="step-label">점장 조치 완료</span><p>점장이 요청한 조치를 완료했어요.</p><small>{eventTime(done)}</small></div>}
+        {group === 'done' && <div className="verified"><span className="step-label">점장 조치 완료</span><p>점장이 요청한 조치를 완료했어요.</p></div>}
       </div>
       {group === 'need' && <div className="result-actions single"><button type="button" className="primary" onClick={() => onRequest(issue)}>조치 요청 <Icon name="send" size={13} /></button></div>}
     </article>
@@ -269,7 +266,7 @@ function StoreManagementView({ costs, onRequest }: { costs: CostItem[]; onReques
                 <span><small>이번 달 매출</small><b>{store.metric.hasMonthSales ? money(store.metric.monthSales) : '기록 없음'}</b><em>{data.date.slice(0,7)} 누적</em></span>
                 <span><small>업무 이행률</small><b>{store.rate}</b><em>최근 7일</em></span>
               </span>
-              <span className="directory-card-bottom"><span><i className="good" /> 기준일 {data.date}</span><b>상세 현황 보기 <Icon name="chevron" size={15} /></b></span>
+              <span className="directory-card-bottom"><span><i className="good" /> 운영 현황</span><b>상세 현황 보기 <Icon name="chevron" size={15} /></b></span>
             </button>
           ))}
         </div>
@@ -279,12 +276,12 @@ function StoreManagementView({ costs, onRequest }: { costs: CostItem[]; onReques
 
   return (
     <section className="store-management-view">
-      <div className="store-detail-header"><button onClick={() => setSelectedStore(null)}><Icon name="chevron" size={16} /> 매장 목록</button><div><span className="store-icon store-icon-orange"><Icon name="store" size={19} /></span><span><h2>{selectedStore}</h2><p>{selected?.location} · 기준일 {data.date}</p></span></div><span className="issue-count-pill">이슈 <b>{selectedIssues.length}</b>건</span></div>
+      <div className="store-detail-header"><button onClick={() => setSelectedStore(null)}><Icon name="chevron" size={16} /> 매장 목록</button><div><span className="store-icon store-icon-orange"><Icon name="store" size={19} /></span><span><h2>{selectedStore}</h2><p>{selected?.location}</p></span></div><span className="issue-count-pill">이슈 <b>{selectedIssues.length}</b>건</span></div>
       <div className="store-kpis">
         <article><small>이번 달 매출</small><strong>{selected?.metric.hasMonthSales ? money(selected.metric.monthSales) : '기록 없음'}</strong><span className="positive">{data.date.slice(0,7)} 누적</span></article>
         <article><small>이번 달 비용</small><strong>{money(totalInputCost)}</strong><span>점장 입력 {storeCosts.length}건 반영</span></article>
         <article><small>리뷰 평점</small><strong>—</strong><span className="warning">리뷰 수집 준비 중</span></article>
-        <article><small>업무 이행률</small><strong>{selected?.rate}</strong><span className="warning">오늘 {checks.filter(c => !c.done).length}개 미완료</span></article>
+        <article><small>업무 이행률</small><strong>{selected?.rate}</strong><span className="warning">{checks.filter(c => !c.done).length}개 미완료</span></article>
       </div>
       <div className="manager-submitted-section action-results store-issues-panel">
         <div className="submitted-heading"><div><h2>매장 이슈</h2><p>{selectedStore}의 이슈를 조치 단계별로 확인하세요.</p></div><span className="issue-count-pill">이슈 <b>{storeGrouped.length}</b>건</span></div>
@@ -304,8 +301,8 @@ function StoreManagementView({ costs, onRequest }: { costs: CostItem[]; onReques
         <article className="analytics-panel input-data-panel">
           <div className="analytics-heading"><div><h2>점장 입력 내역</h2><p>점장 대시보드에서 최근 입력된 항목</p></div><Badge tone="info">실시간 반영</Badge></div>
           <div className="manager-input-list">
-            {storeCosts.slice(0,3).map((cost, index) => <div key={index}><span className="input-icon cost"><Icon name="package" size={15} /></span><p><b>{cost.memo}</b><small>{cost.type} · {cost.date}</small></p><strong>-{cost.amount.toLocaleString()}원</strong></div>)}
-            <div><span className="input-icon check"><Icon name="check" size={15} /></span><p><b>일일 점검 기록</b><small>{data.date} · {checks.filter(c => c.done).length}/{checks.length}</small></p><Badge tone="good">{checks.filter(c => c.done).length}개 완료</Badge></div>
+            {storeCosts.slice(0,3).map((cost, index) => <div key={index}><span className="input-icon cost"><Icon name="package" size={15} /></span><p><b>{cost.memo}</b><small>{cost.type}</small></p><strong>-{cost.amount.toLocaleString()}원</strong></div>)}
+            <div><span className="input-icon check"><Icon name="check" size={15} /></span><p><b>일일 점검 기록</b><small>{checks.filter(c => c.done).length}/{checks.length} 완료</small></p><Badge tone="good">{checks.filter(c => c.done).length}개 완료</Badge></div>
           </div>
         </article>
         <article className="analytics-panel review-management">
@@ -338,7 +335,7 @@ function SvReportCard({ report }: { report: Row }) {
   }
   return (
     <article className="sv-report-card">
-      <div className="feedback-top"><small>{new Date(report.created_at).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })} 제출</small><Badge tone={report.read_only ? 'neutral' : report.reply || report.reviewed_at ? 'good' : 'info'}>{status}</Badge></div>
+      <div className="feedback-top"><span className="sv-report-store"><b>{storeName(data, report.store_id)}</b></span><Badge tone={report.read_only ? 'neutral' : report.reply || report.reviewed_at ? 'good' : 'info'}>{status}</Badge></div>
       <h3>{report.title}</h3>
       <p>{report.summary}</p>
       <WeeklyReportBody figures={report.metrics || {}} weekly={weeklyForReport(data, report)} />
@@ -443,10 +440,9 @@ function Dashboard({ onSwitch, costs, reports, managerIssues }: { onSwitch: () =
         <main className={`manager-main ${active === '매장 관리' ? 'compact-top' : ''}`}>
           {active === 'MY PAGE' ? <SvMyPage onSwitch={onSwitch} onNotifySettings={() => setSvNotifyOpen(true)} /> : <>
           {active !== '매장 관리' && <section className="manager-welcome">
-            <p>{dayLabel(data.date)} · 담당 {data.stores.length}개 매장</p>
+            <p>담당 {data.stores.length}개 매장</p>
             <h1>{active === '현황' ? '안녕하세요, SV님' : active === '주간 보고서' ? '매장별 주간 보고서' : active}</h1>
             <span>{active === '현황' ? '확인이 필요한 이슈부터 살펴보세요.' : active === '주간 보고서' ? '매장을 선택하면 그 매장의 주간 보고서를 볼 수 있어요.' : `${data.stores.length}개 매장의 운영 데이터를 한눈에 확인하세요.`}</span>
-            <button className="date-chip" onClick={() => live.open({type:'date'})}><Icon name="calendar" size={15} /> {data.date} <Icon name="chevron" size={13} /></button>
           </section>}
 
           {active === '현황' ? <>
@@ -457,7 +453,7 @@ function Dashboard({ onSwitch, costs, reports, managerIssues }: { onSwitch: () =
                 <button onClick={() => setActive('이슈 보드')}>전체 보기 <Icon name="chevron" size={15} /></button>
               </div>
               <div className="issue-list">
-                {urgent.map(issue => <article key={issue.id} className={`issue-row ${issue.severity === 'critical' ? 'critical' : 'warning'}`}><span className="issue-source temp"><Icon name={issue.kind === 'temperature' ? 'thermometer' : 'check'} /></span><div className="issue-body"><div><Badge tone={issue.severity === 'critical' ? 'critical' : 'warning'}>{statusLabels[issue.status]}</Badge><Badge tone="neutral">{shortDate(issue.business_date)}</Badge></div><h3>{issue.title}</h3><p>{storeName(data,issue.store_id)}</p><span className="evidence"><b>{issue.value !== null ? `${issue.value}${issue.kind === 'temperature' ? '℃' : ''}` : '점검 기록'}</b><i />{issue.standard}</span></div><div className="issue-action"><small>{shortDate(issue.due_date || '')}</small><button onClick={() => live.open({type:'issue',issue})}>확인하기 <Icon name="chevron" size={15} /></button></div></article>)}
+                {urgent.map(issue => <article key={issue.id} className={`issue-row ${issue.severity === 'critical' ? 'critical' : 'warning'}`}><span className="issue-source temp"><Icon name={issue.kind === 'temperature' ? 'thermometer' : 'check'} /></span><div className="issue-body"><div><Badge tone={issue.severity === 'critical' ? 'critical' : 'warning'}>{statusLabels[issue.status]}</Badge></div><h3>{issue.title}</h3><p>{storeName(data,issue.store_id)}</p><span className="evidence"><b>{issue.value !== null ? `${issue.value}${issue.kind === 'temperature' ? '℃' : ''}` : '점검 기록'}</b><i />{issue.standard}</span></div><div className="issue-action"><small>기한 {shortDate(issue.due_date || '')}</small><button onClick={() => live.open({type:'issue',issue})}>확인하기 <Icon name="chevron" size={15} /></button></div></article>)}
                 {!urgent.length && <p className="my-history-empty">지금 확인할 긴급 이슈가 없어요.</p>}
               </div>
             </div>
@@ -479,8 +475,8 @@ function Dashboard({ onSwitch, costs, reports, managerIssues }: { onSwitch: () =
             <aside className="panel activity-panel">
               <div className="panel-heading"><div><h2>최근 활동</h2><span>매장별 업데이트</span></div><button><Icon name="more" /></button></div>
               <div className="timeline">
-                {data.events.slice(0,4).map(event => <div key={event.id}><span className="timeline-dot blue"><Icon name="check" size={12} /></span><p><b>{({assign:'담당 배정',start:'조치 시작',request_verification:'확인 요청',verify:'확인 완료',reject:'보완 요청',measurement:'측정 기록'} as Record<string,string>)[event.operation] || '점검 기록'}</b><span>{data.actions.find(a => a.id === event.action_id)?.title || '운영 조치'}</span><small>{new Date(event.created_at).toLocaleString('ko-KR')}</small></p></div>)}
-                {!data.events.length && <div><span className="timeline-dot blue"><Icon name="check" size={12} /></span><p><b>운영 기록 조회</b><span>{data.stores.length}개 매장</span><small>기준일 {data.date}</small></p></div>}
+                {data.events.slice(0,4).map(event => <div key={event.id}><span className="timeline-dot blue"><Icon name="check" size={12} /></span><p><b>{({assign:'담당 배정',start:'조치 시작',request_verification:'확인 요청',verify:'확인 완료',reject:'보완 요청',measurement:'측정 기록'} as Record<string,string>)[event.operation] || '점검 기록'}</b><span>{data.actions.find(a => a.id === event.action_id)?.title || '운영 조치'}</span></p></div>)}
+                {!data.events.length && <div><span className="timeline-dot blue"><Icon name="check" size={12} /></span><p><b>운영 기록 조회</b><span>{data.stores.length}개 매장</span></p></div>}
               </div>
             </aside>
           </section>
@@ -506,8 +502,6 @@ function Dashboard({ onSwitch, costs, reports, managerIssues }: { onSwitch: () =
 }
 
 type Notice = { key: string; type: string; icon: IconName; tone: 'red' | 'amber' | 'green' | 'blue'; title: string; detail: string; at: string; onOpen: () => void }
-
-const noticeTime = (at: string) => at.length > 10 ? new Date(at).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : at
 
 const managerNoticeTypes = [
   { key: 'request', label: 'SV 조치 요청', detail: 'SV가 조치나 보완을 요청하면 알려줘요' },
@@ -558,7 +552,7 @@ function NotificationScreen({ notices, onBack }: { notices: Notice[]; onBack: ()
           {sorted.map(item => (
             <button key={item.key} type="button" onClick={item.onOpen}>
               <span className={`notice-icon ${item.tone}`}><Icon name={item.icon} size={17} /></span>
-              <span className="notice-copy"><b>{item.title}</b><span>{item.detail}</span><small>{noticeTime(item.at)}</small></span>
+              <span className="notice-copy"><b>{item.title}</b><span>{item.detail}</span></span>
               <Icon name="chevron" size={15} />
             </button>
           ))}
@@ -935,8 +929,8 @@ function ManagementPage({ onToast, costs, schedules, setSchedules, inventory, se
   return (
     <section className="management-page">
       <div className="subpage-heading">
-        <div><p>{storeName(data,data.session.storeId)} 운영</p><h1>매장 관리</h1><span>오늘의 업무와 일정을 한 번에 확인하세요.</span></div>
-        <button onClick={() => live.open({type:'date'})}><Icon name="calendar" size={17} /> {data.date}</button>
+        <div><p>{storeName(data,data.session.storeId)} 운영</p><h1>매장 관리</h1></div>
+        <button onClick={() => live.open({type:'date'})}><Icon name="calendar" size={17} /> 날짜 변경</button>
       </div>
 
       <div className="management-checklist-full">
@@ -945,14 +939,14 @@ function ManagementPage({ onToast, costs, schedules, setSchedules, inventory, se
 
       <button type="button" className="inventory-entry" onClick={() => setInventoryOpen(true)}>
         <span className="phase-entry-icon"><Icon name="package" size={20} /></span>
-        <span className="phase-entry-copy"><b>재고 관리</b><small>입고·폐기를 한 번에 기록해요</small></span>
+        <span className="phase-entry-copy"><b>재고 관리</b></span>
         <span className="inventory-entry-count">입고 {inventory.filter(r => r.store_id === data.session.storeId && r.date === data.date && r.type === 'in').length} · 폐기 {inventory.filter(r => r.store_id === data.session.storeId && r.date === data.date && r.type === 'waste').length}</span>
         <Icon name="chevron" size={16} />
       </button>
       {inventoryOpen && <InventoryScreen records={inventory} setRecords={setInventory} setSchedules={setSchedules} onToast={onToast} onClose={() => setInventoryOpen(false)} />}
 
       <article className="simple-panel calendar-panel">
-        <div className="calendar-heading"><div><h2>{monthNumber}월 일정</h2><p>날짜를 선택해 운영 기록을 확인하세요.</p></div><div><button aria-label="이전 달" onClick={() => shiftMonth(-1)}><Icon name="chevron" size={16} /></button><b>{monthLabel}</b><button aria-label="다음 달" onClick={() => shiftMonth(1)}><Icon name="chevron" size={16} /></button></div></div>
+        <div className="calendar-heading"><div><h2>{monthNumber}월 일정</h2></div><div><button aria-label="이전 달" onClick={() => shiftMonth(-1)}><Icon name="chevron" size={16} /></button><b>{monthLabel}</b><button aria-label="다음 달" onClick={() => shiftMonth(1)}><Icon name="chevron" size={16} /></button></div></div>
         <div className="calendar-layout">
           <div className="calendar">
             <div className="weekdays">{['일', '월', '화', '수', '목', '금', '토'].map((day) => <b key={day}>{day}</b>)}</div>
@@ -1065,7 +1059,6 @@ function SentHistoryItem({ item, badge, onSave, onDelete }: { item: SentItem; ba
   return (
     <article>
       <div><b>{item.title}</b>{badge}</div>
-      <small>{item.sentAt}</small>
       <p>{item.summary}</p>
       {mode === 'delete'
         ? <div className="history-actions confirm"><span>삭제하면 SV 화면에서도 사라져요.</span><button onClick={() => setMode('view')}>취소</button><button className="danger" onClick={() => void onDelete()}>삭제</button></div>
@@ -1161,7 +1154,7 @@ function WeeklyReportBody({ figures, weekly }: { figures: WeeklyFigures; weekly?
             <div key={index} className={issue.state === 'done' ? 'done' : 'open'}>
               <div><Badge tone={issue.severity === 'critical' ? 'critical' : 'warning'}>{issue.severity === 'critical' ? '긴급' : '일반'}</Badge><small>{issueKindLabel[issue.kind] || '이슈'} · {shortDate(issue.date)}</small><em>{issueStateLabel[issue.state]}</em></div>
               <b>{issue.title}</b>
-              {(issue.request || issue.doneAt) && <p>{issue.request && <>조치 요청: {issue.request}</>}{issue.request && issue.doneAt && ' · '}{issue.doneAt && <>완료 {new Date(issue.doneAt).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</>}</p>}
+              {issue.request && <p>조치 요청: {issue.request}</p>}
             </div>
           ))}
           {ordered.length === 0 && <p className="my-history-empty">이번 주에 발생한 이슈가 없어요.</p>}
@@ -1204,7 +1197,7 @@ function ReportFeedbackList({ ackedReplies, onAck }: { ackedReplies: string[]; o
           const fresh = report.reply && !ackedReplies.includes(key)
           return (
             <article key={report.id} className="replied">
-              <div className="feedback-top"><Badge tone={fresh ? 'info' : 'good'}>{fresh ? '새 피드백' : '답변 확인함'}</Badge><small>{new Date(report.created_at).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })} 보냄</small></div>
+              <div className="feedback-top"><Badge tone={fresh ? 'info' : 'good'}>{fresh ? '새 피드백' : '답변 확인함'}</Badge></div>
               <h3>{report.title}</h3>
               <p>{report.summary}</p>
               <WeeklyReportBody figures={report.metrics || {}} weekly={weeklyForReport(data, report)} />
@@ -1273,7 +1266,7 @@ function ReportPage({ costs, onToast, tab, setTab, ackedReplies, onAck, inventor
 
   return (
     <section className="management-page report-page">
-      <div className="subpage-heading"><div><p>{storeName(data,data.session.storeId)} 운영 데이터</p><h1>보고</h1><span>매출과 비용, 고객 리뷰를 확인하고 필요한 내용을 SV에게 전달하세요.</span></div></div>
+      <div className="subpage-heading"><div><p>{storeName(data,data.session.storeId)} 운영 데이터</p><h1>보고</h1></div></div>
       <div className="report-tabs" role="tablist">
         <button type="button" role="tab" aria-selected={tab === 'write'} className={tab === 'write' ? 'active' : ''} onClick={() => setTab('write')}>보고서 작성</button>
         <button type="button" role="tab" aria-selected={tab === 'feedback'} className={tab === 'feedback' ? 'active' : ''} onClick={() => setTab('feedback')}>피드백{data.reports.filter(r => !r.read_only && r.store_id === data.session.storeId && r.reply && !ackedReplies.includes(`${r.id}:${r.reply}`)).length > 0 && <i>{data.reports.filter(r => !r.read_only && r.store_id === data.session.storeId && r.reply && !ackedReplies.includes(`${r.id}:${r.reply}`)).length}</i>}</button>
@@ -1285,7 +1278,7 @@ function ReportPage({ costs, onToast, tab, setTab, ackedReplies, onAck, inventor
       </div>
       <div className="report-overview-grid">
         <article className="simple-panel sales-panel report-sales-panel">
-          <div className="simple-panel-title"><div><span className="panel-title-icon violet"><Icon name="chart" size={18} /></span><div><h2>매출 현황</h2><p>{dayLabel(data.date)} · 일별 집계</p></div></div><Badge tone="good">기록 기준</Badge></div>
+          <div className="simple-panel-title"><div><span className="panel-title-icon violet"><Icon name="chart" size={18} /></span><div><h2>매출 현황</h2></div></div></div>
           <div className="sales-total"><span><small>현재 매출</small><strong>{todaySale ? money(Number(todaySale.sales_amount)) : '기록 없음'}</strong></span><span><small>주간 누적</small><b>{metric.hasSales ? money(metric.sales) : '기록 없음'}</b></span></div>
           <div className="sales-chart">{dailySales.map(row => <i key={row.date} title={`${row.date}: ${money(Number(row.sales_amount))}`} style={{height:`${Number(row.sales_amount)/maxSales*100}%`}} className={row.date === data.date ? 'peak' : ''} />)}</div>
           <div className="sales-labels"><span>{shortDate(dailySales[0]?.date || '')}</span><span>일별 매출</span><span>{shortDate(data.date)}</span></div>
@@ -1452,9 +1445,8 @@ function ManagerApp({ onSwitch, costs }: { onSwitch: () => void; costs: CostItem
           {active === '홈' ? (
             <>
               <section className="manager-welcome">
-                <p>{dayLabel(data.date)} · {store.store_name}</p>
+                <p>{store.store_name}</p>
                 <h1>좋은 아침이에요, 점장님</h1>
-                <span>오늘 꼭 필요한 일만 모아뒀어요.</span>
               </section>
 
               <section className="today-summary">
@@ -1473,7 +1465,7 @@ function ManagerApp({ onSwitch, costs }: { onSwitch: () => void; costs: CostItem
                       <div className="task-top"><span className="task-icon"><Icon name="send" /></span><div><Badge tone="critical">{event!.operation === 'reject' ? 'SV 보완 요청' : 'SV 요청'}</Badge><Badge tone="neutral">진행 중</Badge></div><button aria-label="이슈 상세" onClick={() => live.open({type:'issue',issue})}><Icon name="chevron" size={17} /></button></div>
                       <h3>{event!.note || issue.verification_note || issue.title}</h3>
                       <p>이슈: {issue.title}</p>
-                      <div className="evidence-panel"><span><small>요청 시각</small><b>{new Date(event!.created_at).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</b></span><i /><span><small>처리 기한</small><b>{issue.due_date || '기한 없음'}</b></span></div>
+                      <div className="evidence-panel"><span><small>요청 상태</small><b>처리 필요</b></span><i /><span><small>처리 기한</small><b>{issue.due_date || '기한 없음'}</b></span></div>
                       <button className="primary-action complete-action" disabled={live.busy} onClick={() => void completeRequest(issue)}>조치 완료 <Icon name="arrow" size={17} /></button>
                     </article>
                   ))}
@@ -1491,7 +1483,7 @@ function ManagerApp({ onSwitch, costs }: { onSwitch: () => void; costs: CostItem
               </section>
 
               <section className="manager-section deadline-section">
-                <div className="manager-section-title"><div><h2>오늘 이런 일정이 있어요</h2><span className="count-badge neutral">{todayEntries.length + 1}</span></div><small>시간순</small></div>
+                <div className="manager-section-title"><div><h2>일정</h2><span className="count-badge neutral">{todayEntries.length + 1}</span></div></div>
                 <div className="deadline-list">
                   <button onClick={() => setActive('관리')}><span className="deadline-time"><b>{checkRate}%</b><small>체크 달성률</small></span><span className="deadline-copy"><b>관리자 일일 체크리스트</b><small>오픈 {phaseDone('open')}/{phaseTotal('open')} · 마감 {phaseDone('close')}/{phaseTotal('close')}</small><span className="check-rate-bar"><i style={{ width: `${checkRate}%` }} /></span></span><span className="progress-ring" style={{ background: `conic-gradient(#0a6936 ${checkRate * 3.6}deg, #e3f0e9 0deg)` }}><em>{checkDone}/{t03.length}</em></span><Icon name="chevron" size={17} /></button>
                   {todayEntries.map(entry => (
@@ -1594,7 +1586,7 @@ function LiveDialogs() {
   }
   return <div className="report-modal-backdrop" onClick={event => {if(event.target===event.currentTarget)close()}}>
     <div className="report-modal" role="dialog" aria-modal="true" aria-labelledby="live-dialog-title">
-      <div className="report-modal-heading"><div><Badge tone="info">{storeName(data,issue?.store_id || report?.store_id || data.session.storeId)}</Badge><h2 id="live-dialog-title">{title}</h2><p>{dialog.type === 'date' ? '확인할 날짜를 선택해 주세요.' : data.date}</p></div><button aria-label="닫기" disabled={live.busy} onClick={close}><Icon name="close" size={18}/></button></div>
+      <div className="report-modal-heading"><div><Badge tone="info">{storeName(data,issue?.store_id || report?.store_id || data.session.storeId)}</Badge><h2 id="live-dialog-title">{title}</h2>{dialog.type === 'date' && <p>확인할 날짜를 선택해 주세요.</p>}</div><button aria-label="닫기" disabled={live.busy} onClick={close}><Icon name="close" size={18}/></button></div>
       <div className="report-form">
         {dialog.type === 'issues' && <div className="issue-browser-list">{data.issues.filter(i => i.store_id === data.session.storeId && activeIssue(i)).map(issue => <button key={issue.id} onClick={() => live.open({type:'issue',issue})}><span className="source-mini critical"><Icon name={issue.kind === 'temperature' ? 'thermometer' : 'check'} size={16}/></span><span><b>{issue.title}</b><small>{statusLabels[issue.status]}</small></span><Icon name="chevron" size={16}/></button>)}</div>}
         {dialog.type === 'date' && <label><span>날짜</span><input type="date" min="0001-01-01" max="9999-12-31" value={date} onChange={event => setDate(event.target.value)}/></label>}

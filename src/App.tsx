@@ -1431,7 +1431,7 @@ function ManagerApp({ onSwitch, costs }: { onSwitch: () => void; costs: CostItem
 
   return (
     <div className="manager-bg">
-      <div className="manager-shell">
+      <div className="manager-shell mgr-shell">
         <header className="manager-header">
           <div className="manager-brand"><BrandLogo /><b>CRBU</b></div>
           <div className="manager-tools">

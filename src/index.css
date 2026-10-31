@@ -1007,6 +1007,214 @@ label.inventory-check { display: flex; align-items: center; gap: 6px; color: #34
   .cost-panel .cost-row > strong { grid-column: 2; justify-self: start; }
 }
 
+/* SV screens: larger type and calmer spacing without changing the theme. */
+.sv-shell .manager-main { padding-right: 20px; padding-left: 20px; }
+.sv-shell .manager-welcome { margin-bottom: 28px; }
+.sv-shell .manager-welcome p { font-size: 13px; }
+.sv-shell .manager-welcome h1 { margin-top: 8px; font-size: 27px; line-height: 1.25; }
+.sv-shell .manager-welcome > span { margin-top: 8px; font-size: 14px; line-height: 1.5; }
+.sv-shell .panel-heading { padding: 18px 18px 14px; }
+.sv-shell .panel-heading h2 { font-size: 17px; }
+.sv-shell .panel-heading span { margin-top: 5px; font-size: 12px; }
+.sv-shell .panel-heading button { min-height: 36px; font-size: 12px; }
+.sv-shell .result-summary { gap: 10px; margin-top: 18px; }
+.sv-shell .result-summary-card { padding: 16px 14px; }
+.sv-shell .result-summary-card small { font-size: 12px; }
+.sv-shell .result-summary-card strong { font-size: 27px; }
+.sv-shell .result-summary-card em { font-size: 11px; }
+.sv-shell .issue-row { min-height: 0; padding: 18px 16px 18px 20px; }
+.sv-shell .issue-body h3 { margin-top: 8px; font-size: 16px; line-height: 1.4; }
+.sv-shell .issue-body > p { margin-top: 5px; font-size: 12px; }
+.sv-shell .evidence { margin-top: 9px; font-size: 12px; }
+.sv-shell .issue-action small { font-size: 11px; }
+.sv-shell .issue-action button { min-height: 38px; padding: 0 12px; font-size: 12px; }
+.sv-shell .submitted-heading { margin-bottom: 16px; }
+.sv-shell .submitted-heading h2,
+.sv-shell .store-directory-heading h2 { font-size: 19px; }
+.sv-shell .submitted-heading p,
+.sv-shell .store-directory-heading p { margin-top: 6px; font-size: 12px; line-height: 1.5; }
+.sv-shell .result-filter button { min-height: 42px; font-size: 12px; }
+.sv-shell .result-card { padding: 17px; }
+.sv-shell .result-top small { font-size: 11px; }
+.sv-shell .result-card > h3 { margin-top: 12px; font-size: 16px; line-height: 1.4; }
+.sv-shell .result-steps { gap: 10px; margin-top: 13px; }
+.sv-shell .result-steps > div { padding: 12px; }
+.sv-shell .step-label { font-size: 10px; }
+.sv-shell .result-steps p { margin-top: 7px; font-size: 13px; line-height: 1.5; }
+.sv-shell .result-steps small { margin-top: 6px; font-size: 11px; }
+.sv-shell .result-actions button { min-height: 42px; font-size: 12px; }
+.sv-shell .store-directory { gap: 14px; }
+.sv-shell .store-directory > button { border-radius: 14px; }
+.sv-shell .directory-card-top { padding: 18px; }
+.sv-shell .directory-card-top b { font-size: 15px; }
+.sv-shell .directory-card-top small { font-size: 11px; }
+.sv-shell .directory-metrics { padding: 16px 10px; }
+.sv-shell .directory-metrics small { font-size: 10px; }
+.sv-shell .directory-metrics b { font-size: 16px; }
+.sv-shell .directory-metrics em { font-size: 9px; }
+.sv-shell .directory-card-bottom { padding: 13px 16px; }
+.sv-shell .directory-card-bottom > span,
+.sv-shell .directory-card-bottom > b { font-size: 10px; }
+.sv-shell .store-detail-header h2 { font-size: 19px; }
+.sv-shell .store-detail-header p { font-size: 11px; }
+.sv-shell .store-kpis article { padding: 15px; }
+.sv-shell .store-kpis small { font-size: 10px; }
+.sv-shell .store-kpis strong { font-size: 20px; }
+.sv-shell .store-kpis span { font-size: 10px; line-height: 1.4; }
+.sv-shell .analytics-panel { padding-bottom: 4px; }
+.sv-shell .analytics-heading { padding: 17px 18px 13px; }
+.sv-shell .analytics-heading h2 { font-size: 16px; }
+.sv-shell .analytics-heading p { margin-top: 5px; font-size: 11px; }
+.sv-shell .manager-input-list { padding: 8px 18px; }
+.sv-shell .manager-input-list p b { font-size: 12px; }
+.sv-shell .manager-input-list p small,
+.sv-shell .manager-input-list > div > strong { font-size: 10px; }
+.sv-shell .sales-trend-card { padding: 18px; }
+.sv-shell .sales-trend-head h2 { font-size: 17px; }
+.sv-shell .sales-trend-head p { font-size: 11px; }
+.sv-shell .sales-trend-head small,
+.sv-shell .sales-trend-today small { font-size: 11px; }
+.sv-shell .sales-trend-head b { font-size: 16px; }
+.sv-shell .sales-trend-today b { font-size: 23px; }
+.sv-shell .store-report-picker button { min-height: 58px; padding: 12px; }
+.sv-shell .store-report-picker button b { font-size: 13px; }
+.sv-shell .store-report-picker button small { font-size: 10px; }
+.sv-shell .sv-report-card,
+.sv-shell .feedback-list > article { padding: 17px; }
+.sv-shell .sv-report-card h3,
+.sv-shell .feedback-list h3 { font-size: 17px; line-height: 1.4; }
+.sv-shell .sv-report-card > p,
+.sv-shell .feedback-list article > p { font-size: 13px; line-height: 1.6; }
+.sv-shell .weekly-block { padding: 14px; }
+.sv-shell .weekly-block-title h4 { font-size: 14px; }
+.sv-shell .weekly-block-title small { font-size: 10px; }
+.sv-shell .weekly-counts span { font-size: 10px; }
+.sv-shell .weekly-counts b { font-size: 18px; }
+.sv-shell .weekly-issues b { font-size: 12px; }
+.sv-shell .weekly-issues p { font-size: 11px; }
+.sv-shell .sv-report-actions button { min-height: 44px; font-size: 12px; }
+.sv-shell .profile-card-large h2 { font-size: 18px; }
+.sv-shell .profile-card-large p { font-size: 12px; }
+.sv-shell .profile-card-large span { font-size: 10px; }
+.sv-shell .settings-list > button { min-height: 64px; padding: 16px 18px; }
+.sv-shell .settings-list b { font-size: 14px; }
+.sv-shell .settings-list small { font-size: 11px; line-height: 1.45; }
+
+@container app (max-width: 360px) {
+  .sv-shell .manager-main { padding-right: 16px; padding-left: 16px; }
+  .sv-shell .manager-welcome h1 { font-size: 25px; }
+  .sv-shell .result-summary { grid-template-columns: 1fr; }
+  .sv-shell .store-kpis { grid-template-columns: 1fr; }
+  .sv-shell .sales-trend-head { align-items: flex-start; flex-direction: column; }
+  .sv-shell .sales-trend-head > span { align-items: flex-start; }
+}
+
+/* Manager screens: larger type and touch targets, matching the SV screens. */
+.mgr-shell .manager-main { padding-right: 20px; padding-left: 20px; }
+.mgr-shell .manager-welcome p { font-size: 13px; }
+.mgr-shell .manager-welcome h1 { margin-top: 8px; font-size: 27px; line-height: 1.25; }
+.mgr-shell .today-summary { padding: 18px 10px; }
+.mgr-shell .today-summary b { font-size: 22px; }
+.mgr-shell .today-summary small { font-size: 12px; }
+.mgr-shell .manager-section-title h2 { font-size: 19px; }
+.mgr-shell .manager-section-title > small { font-size: 12px; }
+.mgr-shell .count-badge { min-width: 22px; height: 22px; font-size: 11px; }
+.mgr-shell .badge { font-size: 11px; }
+.mgr-shell .task-card > h3 { font-size: 18px; line-height: 1.4; }
+.mgr-shell .task-card > p { margin-top: 6px; font-size: 13px; }
+.mgr-shell .evidence-panel small { font-size: 11px; }
+.mgr-shell .evidence-panel b { font-size: 16px; }
+.mgr-shell .primary-action,
+.mgr-shell .secondary-action { height: 46px; font-size: 14px; }
+.mgr-shell .link-row { font-size: 12px; }
+.mgr-shell .all-clear h3 { font-size: 17px; }
+.mgr-shell .all-clear p { font-size: 12px; }
+.mgr-shell .other-issues-link { font-size: 13px; }
+.mgr-shell .deadline-time b { font-size: 16px; }
+.mgr-shell .deadline-time small,
+.mgr-shell .deadline-copy small { font-size: 11px; }
+.mgr-shell .deadline-copy b { font-size: 14px; }
+.mgr-shell .deadline-list .progress-ring em { font-size: 9px; }
+.mgr-shell .bottom-nav small { font-size: 11px; }
+.mgr-shell .subpage-heading p { font-size: 13px; }
+.mgr-shell .subpage-heading h1 { font-size: 27px; }
+.mgr-shell .subpage-heading > div > span { font-size: 13px; }
+.mgr-shell .simple-panel-title h2 { font-size: 16px; }
+.mgr-shell .simple-panel-title p { font-size: 12px; line-height: 1.45; }
+.mgr-shell .simple-panel-title > b { font-size: 14px; }
+.mgr-shell .phase-entry-copy b { font-size: 16px; }
+.mgr-shell .phase-entry-copy small { font-size: 12px; }
+.mgr-shell .phase-entry-count strong { font-size: 16px; }
+.mgr-shell .phase-entry-count strong small { font-size: 11px; }
+.mgr-shell .phase-complete { font-size: 12px; }
+.mgr-shell .checklist-screen-header h2 { font-size: 17px; }
+.mgr-shell .checklist-screen-header p { font-size: 11px; }
+.mgr-shell .checklist-screen-header > b { font-size: 15px; }
+.mgr-shell .group-list h3 { font-size: 14px; }
+.mgr-shell .group-row { padding: 12px 0; }
+.mgr-shell .group-row b { font-size: 13px; line-height: 1.4; }
+.mgr-shell .group-row small { font-size: 11px; }
+.mgr-shell .status-toggle { font-size: 11px; }
+.mgr-shell .status-toggle.readonly.unset span { font-size: 10px; }
+.mgr-shell .check-items button b { font-size: 13px; }
+.mgr-shell .check-items button small { font-size: 11px; }
+.mgr-shell .calendar-heading h2 { font-size: 17px; }
+.mgr-shell .calendar-heading p { font-size: 12px; }
+.mgr-shell .calendar-heading b { font-size: 12px; }
+.mgr-shell .calendar-grid button > span { font-size: 10px; }
+.mgr-shell .calendar-grid small { font-size: 9px; }
+.mgr-shell .calendar-grid .more-events { font-size: 8px; }
+.mgr-shell .schedule-date > span { font-size: 12px; }
+.mgr-shell .schedule-date small { font-size: 11px; }
+.mgr-shell .schedule-item small { font-size: 10px; }
+.mgr-shell .schedule-item b { font-size: 13px; }
+.mgr-shell .schedule-item p { font-size: 11px; }
+.mgr-shell .schedule-empty { font-size: 12px; }
+.mgr-shell .schedule-form label span { font-size: 11px; }
+.mgr-shell .schedule-form input,
+.mgr-shell .schedule-form select { height: 38px; font-size: 13px; }
+.mgr-shell .schedule-categories button { height: 34px; font-size: 12px; }
+.mgr-shell .schedule-form-actions button { height: 38px; font-size: 12px; }
+.mgr-shell .inventory-entry-count { font-size: 12px; }
+.mgr-shell .inventory-form label > span,
+.mgr-shell .inventory-reasons > span { font-size: 12px; }
+.mgr-shell .inventory-form select,
+.mgr-shell .inventory-form input[type=date],
+.mgr-shell .inventory-form input[inputmode],
+.mgr-shell .inventory-form textarea { min-height: 42px; font-size: 14px; }
+.mgr-shell .inventory-qty em { font-size: 13px; }
+.mgr-shell .inventory-hint { font-size: 11px; }
+.mgr-shell label.inventory-check { font-size: 12px; }
+.mgr-shell .inventory-reasons button { padding: 8px 12px; font-size: 12px; }
+.mgr-shell .inventory-save { height: 46px; font-size: 14px; }
+.mgr-shell .inventory-history-head button { font-size: 11px; }
+.mgr-shell .inventory-history article b,
+.mgr-shell .inventory-history article strong { font-size: 13px; }
+.mgr-shell .inventory-history article p { font-size: 12px; }
+.mgr-shell .inventory-history article small,
+.mgr-shell .inventory-history article small button { font-size: 11px; }
+.mgr-shell .notice-copy b { font-size: 14px; }
+.mgr-shell .notice-copy > span { font-size: 12px; }
+.mgr-shell .notice-copy small { font-size: 11px; }
+.mgr-shell .notify-settings b { font-size: 14px; }
+.mgr-shell .notify-settings small { font-size: 11px; }
+.mgr-shell .store-info-list dd:first-child { font-size: 12px; }
+.mgr-shell .store-info-list dd:last-child { font-size: 13px; }
+.mgr-shell .profile-card-large h2 { font-size: 18px; }
+.mgr-shell .profile-card-large p { font-size: 12px; }
+.mgr-shell .profile-card-large span { font-size: 10px; }
+.mgr-shell .settings-list > button { min-height: 64px; padding: 16px 18px; }
+.mgr-shell .settings-list b { font-size: 14px; }
+.mgr-shell .settings-list small { font-size: 11px; line-height: 1.45; }
+
+@container app (max-width: 360px) {
+  .mgr-shell .manager-main { padding-right: 16px; padding-left: 16px; }
+  .mgr-shell .manager-welcome h1,
+  .mgr-shell .subpage-heading h1 { font-size: 25px; }
+  .mgr-shell .today-summary b { font-size: 19px; }
+  .mgr-shell .calendar-grid small { font-size: 8px; }
+}
+
 @container app (max-width: 360px) {
   .sales-trend-head,
   .cost-heading {
